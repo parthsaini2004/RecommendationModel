@@ -1,6 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ user }) => {
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("authToken"); // Clear the auth token
+    navigate("/"); // Redirect to the sign-in page
+  };
   return (
     <div className="max-w-full  mx-2 my-4 "> {/* Apply max-width to avoid overflow */}
       <div className="navbar  bg-[#831010] shadow-lg rounded-lg">
@@ -37,18 +44,25 @@ const Navbar = ({ user }) => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box shadow-lg mt-3 w-52"
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box shadow-lg mt-3 w-40 "
             >
-              <li>
-                <a>
-                  Profile <span className="badge badge-secondary">New</span>
-                </a>
+              <li className="my-0">
+              <button  className="btn btn-ghost w-full text-left py-0 max-h-px">
+              Profile
+               {/* <span className="badge badge-secondary"> */}
+                {/* New */}
+                {/* </span> */}
+              </button>
+                 
+                
+              </li >
+              <li className="my-0">
+              <button  className="btn btn-ghost w-full text-left py-0 max-h-px">Settings</button>
               </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
+              <li className="my-0">
+              <button onClick={handleLogout} className="btn btn-ghost w-full text-left py-0 max-h-px">
+                  Logout
+                </button>
               </li>
             </ul>
           </div>

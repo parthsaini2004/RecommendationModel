@@ -3,12 +3,13 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import RecentlyViewedMovie from './RecentlyViewedMovie';
-import MovieDetailsFetcher from './MovieDetailsFetcher';// Import the new component
+import MovieDetailsFetcher from './MovieDetailsFetcher'; // Import the new component
 
 const Homepage = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [movieIds, setMovieIds] = useState([]);
+  const [recentlyWatchedMovie, setRecentlyWatchedMovie] = useState(null);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -31,10 +32,28 @@ const Homepage = () => {
         setUser(userData);
 
         if (userData?.viewDetails?.movieList) {
-          const uniqueMovieIds = [
-            ...new Set(userData.viewDetails.movieList.map((movie) => movie.movieId)),
-          ];
+          // Extract the movieIds from movieList
+          let uniqueMovieIds = userData.viewDetails.movieList.map((movie) => movie.movieId);
+
+          // If there's a recently watched movie, move it to the end of the list
+          if (recentlyWatchedMovie) {
+            // Remove the recently watched movie if it exists in the array
+            const movieIndex = uniqueMovieIds.indexOf(recentlyWatchedMovie);
+            if (movieIndex !== -1) {
+              uniqueMovieIds.splice(movieIndex, 1); // Remove the movie from the list
+            }
+
+            // Add the recently watched movie at the end of the list
+            uniqueMovieIds.push(recentlyWatchedMovie);
+          }
+
+          // Update movieIds state
           setMovieIds(uniqueMovieIds);
+        }
+
+        // Set the recently watched movie
+        if (userData.viewDetails) {
+          setRecentlyWatchedMovie(userData.viewDetails.recentlyWatched);
         }
       } catch (error) {
         console.error('Error fetching user details:', error);
@@ -44,7 +63,7 @@ const Homepage = () => {
     };
 
     fetchUserDetails();
-  }, []); // No movieIds dependency to prevent unnecessary re-fetching
+  }, [recentlyWatchedMovie]); // Dependency on recentlyWatchedMovie
 
   if (loading) {
     return (
@@ -74,8 +93,8 @@ const Homepage = () => {
               </div>
             </div>
           )}
-          <MovieDetailsFetcher movieIds={movieIds} />
-          
+
+          <MovieDetailsFetcher movieIds={movieIds} recentlyWatchedMovie={recentlyWatchedMovie} user={user} setUser={setUser} />
         </>
       ) : (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -97,8 +116,5 @@ const Homepage = () => {
     </div>
   );
 };
-
-
-
 
 export default Homepage;

@@ -1,10 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const MovieDetailsFetcher = ({ movieIds }) => {
+const MovieDetailsFetcher = ({ movieIds, user, setUser }) => {
   const [movies, setMovies] = useState([]);
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
   const apiUrl = 'https://api.themoviedb.org/3/movie/';
+
+  const handleUpdateMovie = async (movieId) => {
+    if (!user || !user.email) {
+      alert('User not authenticated!');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/update-recently-watched', {
+        email: user.email,
+        recentlyWatchedMovie: movieId,
+      });
+
+      console.log(response.data.message); // Display success message
+
+      // Optionally refresh user data after the update
+      setUser((prevUser) => ({
+        ...prevUser,
+        viewDetails: {
+          ...prevUser.viewDetails,
+          recentlyWatched: movieId,
+          recentlyViewedAt: new Date(),
+        },
+      }));
+    } catch (error) {
+      console.error('Error updating recently watched movie:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -16,6 +44,7 @@ const MovieDetailsFetcher = ({ movieIds }) => {
             const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
             const { title, poster_path } = response.data;
             return {
+              id: movieId, // Add movieId to the object
               title,
               poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
             };
@@ -32,13 +61,25 @@ const MovieDetailsFetcher = ({ movieIds }) => {
 
   return (
     <div className="flex flex-wrap justify-center gap-6">
-      {movies.map((movie, index) => (
-        <div key={index} className="max-w-xs w-72 rounded-lg overflow-hidden shadow-lg bg-white">
-          <img src={movie.poster} alt={movie.title} className="w-full h-72 object-cover" />
-          <div className="px-4 py-2">
-            <h3 className="text-xl font-semibold text-center text-gray-800">{movie.title}</h3>
+      {movies.map((movie) => (
+        <button
+          className='object-cover'
+          key={movie.id} // Ensure key is unique
+          onClick={() => handleUpdateMovie(movie.id)} // Pass movieId when clicked
+        >
+          <div className="max-w-xs w-72 h-[400px] rounded-lg overflow-hidden shadow-lg bg-transparent flex flex-col">
+            {/* Image container */}
+            <img
+              src={movie.poster}
+              alt={movie.title}
+              className="w-full h-72 object-cover"
+            />
+            {/* Title and description container */}
+            <div className="flex-grow px-4 py-2 flex  justify-center">
+              <h3 className="text-xl font-semibold text-center text-slate-500">{movie.title}</h3>
+            </div>
           </div>
-        </div>
+        </button>
       ))}
     </div>
   );
