@@ -10,6 +10,10 @@ const Homepage = () => {
   const [loading, setLoading] = useState(true);
   const [movieIds, setMovieIds] = useState([]);
 
+  const [recentlyWatchedMovie, setRecentlyWatchedMovie] = useState(null);
+
+  
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
@@ -29,12 +33,26 @@ const Homepage = () => {
 
         const userData = response.data.user;
         setUser(userData);
+        // setRecentMovie(userData.viewDetails.RecentlyViewedMovie);
 
         if (userData?.viewDetails?.movieList) {
           const uniqueMovieIds = [
             ...new Set(userData.viewDetails.movieList.map((movie) => movie.movieId)),
           ];
+          if (recentlyWatchedMovie) {
+            // Remove the recently watched movie if it exists in the set
+            if (uniqueMovieIds.has(recentlyWatchedMovie)) {
+              uniqueMovieIds.delete(recentlyWatchedMovie); // Remove the movie ID
+            }
+            
+            // Add the recently watched movie at the end
+            uniqueMovieIds.add(recentlyWatchedMovie);
+          }
+          
           setMovieIds(uniqueMovieIds);
+        }
+        if (userData.viewDetails) {
+          setRecentlyWatchedMovie(userData.viewDetails.RecentlyViewedMovie);
         }
       } catch (error) {
         console.error('Error fetching user details:', error);
@@ -44,7 +62,7 @@ const Homepage = () => {
     };
 
     fetchUserDetails();
-  }, []); // No movieIds dependency to prevent unnecessary re-fetching
+  }, [recentlyWatchedMovie]); // No movieIds dependency to prevent unnecessary re-fetching
 
   if (loading) {
     return (
@@ -74,8 +92,27 @@ const Homepage = () => {
               </div>
             </div>
           )}
-          <MovieDetailsFetcher movieIds={movieIds} />
+
+          <div>
+
+          </div>
+          {/* <div className="mt-4">
+            <label className="text-white mr-2">Update Recently Watched Movie:</label>
+            <input
+              type="number"
+              value={recentlyWatchedMovie || ''}
+              onChange={handleMovieChange}
+              className="p-2 border rounded"
+              placeholder="Enter Movie ID"
+            />
+           
+          </div> */}
+
           
+          <MovieDetailsFetcher movieIds={movieIds} recentlyWatchedMovie={recentlyWatchedMovie} user={user} setUser={setUser}/>
+
+
+
         </>
       ) : (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">

@@ -9,7 +9,7 @@ const AddUser = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page refresh on form submit
 
     if (!name || !email || !password) {
       setError('All fields are required.');
@@ -23,7 +23,9 @@ const AddUser = () => {
       setLoading(true);
       const response = await fetch('http://localhost:5000/api/add-user', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(userData),
       });
 
@@ -39,8 +41,8 @@ const AddUser = () => {
         setError(data.message || 'Failed to add user.');
         setSuccess(null);
       }
-    } catch (err) {
-      console.error('Error:', err);
+    } catch (error) {
+      console.error('Error:', error);
       setError('An error occurred while adding the user.');
       setSuccess(null);
     } finally {
@@ -49,17 +51,56 @@ const AddUser = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Submitting...' : 'Add User'}
-        </button>
+    <div className="max-w-md mx-auto mt-10 mb-10 p-6 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-bold text-center mb-6">Add New User</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-2 text-white rounded-md transition duration-200 ${
+              loading
+                ? 'bg-blue-300 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
+            {loading ? 'Submitting...' : 'Add User'}
+          </button>
+        </div>
       </form>
-      {success && <p>{success}</p>}
-      {error && <p>{error}</p>}
+      {success && (
+        <p className="mt-4 text-green-600 text-center">{success}</p>
+      )}
+      {error && (
+        <p className="mt-4 text-red-600 text-center">{error}</p>
+      )}
     </div>
   );
 };
