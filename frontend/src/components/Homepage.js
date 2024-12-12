@@ -2,43 +2,61 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
-import RecentlyViewedMovie from './RecentlyViewedMovie'; // Import the new component
+import RecentlyViewedMovie from './RecentlyViewedMovie';
+import MovieDetailsFetcher from './MovieDetailsFetcher';// Import the new component
 
 const Homepage = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [movieIds, setMovieIds] = useState([]);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const token = localStorage.getItem('authToken');  // Ensure you're using the same key 'authToken'
-  
+        const token = localStorage.getItem('authToken');
+
         if (!token) {
           console.log('Token not found');
           setLoading(false);
-          return; // If token is not found, don't try to fetch user details
+          return;
         }
-  
-        // Ensure the token is sent with 'Bearer' prefix
+
         const response = await axios.get('http://localhost:5000/api/user-details', {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
-  
-        setUser(response.data.user);
+
+        const userData = response.data.user;
+        setUser(userData);
+
+        if (userData?.viewDetails?.movieList) {
+          const uniqueMovieIds = [
+            ...new Set(userData.viewDetails.movieList.map((movie) => movie.movieId)),
+          ];
+          setMovieIds(uniqueMovieIds);
+        }
       } catch (error) {
         console.error('Error fetching user details:', error);
       } finally {
-        setLoading(false);  // Stop loading state after request is complete
+        setLoading(false);
       }
     };
-  
+
     fetchUserDetails();
-  }, []);  // Empty array ensures this runs only once when the component mounts
-  
+  }, []); // No movieIds dependency to prevent unnecessary re-fetching
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex items-center space-x-4">
+          <div className="w-8 h-8 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+          <span className="text-lg text-gray-700 font-semibold">
+            Loading, please wait...
+          </span>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -48,12 +66,16 @@ const Homepage = () => {
           <Navbar user={user} />
           {user.viewDetails && user.viewDetails.recentlyWatched && (
             <div className="px-3 ml-5 max-w-xl mx-auto my-1 cursor-pointer sh">
-              <div className=" items-center gap-4 relative ">
-                <p className="text-3xl font-semibold text-white text-left mt-[30px] px-[118px]">Recently Viewed:</p>
+              <div className="items-center gap-4 relative">
+                <p className="text-3xl font-semibold text-white text-left mt-[30px] px-[118px]">
+                  Recently Viewed:
+                </p>
                 <RecentlyViewedMovie movieId={user.viewDetails.recentlyWatched} />
               </div>
             </div>
           )}
+          <MovieDetailsFetcher movieIds={movieIds} />
+          
         </>
       ) : (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -75,5 +97,8 @@ const Homepage = () => {
     </div>
   );
 };
+
+
+
 
 export default Homepage;
