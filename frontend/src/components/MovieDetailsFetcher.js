@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const MovieDetailsFetcher = ({ movieIds, user, setUser }) => {
+const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused, setIsDescription, isDescription }) => {
   const [movies, setMovies] = useState([]);
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
   const apiUrl = 'https://api.themoviedb.org/3/movie/';
@@ -29,8 +29,14 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser }) => {
           recentlyViewedAt: new Date(),
         },
       }));
+
+     
+
     } catch (error) {
       console.error('Error updating recently watched movie:', error);
+    } finally {
+      setIsFocused(!isFocused);
+      
     }
   };
 
@@ -42,11 +48,12 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser }) => {
         const movieDetails = await Promise.all(
           movieIds.map(async (movieId) => {
             const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
-            const { title, poster_path } = response.data;
+            const { title, poster_path, overview } = response.data;
             return {
               id: movieId, // Add movieId to the object
               title,
               poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
+              description: overview,
             };
           })
         );
@@ -63,7 +70,7 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser }) => {
     <div className="flex flex-wrap justify-center gap-6">
       {movies.map((movie) => (
         <button
-          className='object-cover'
+          className="object-cover"
           key={movie.id} // Ensure key is unique
           onClick={() => handleUpdateMovie(movie.id)} // Pass movieId when clicked
         >
@@ -75,7 +82,7 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser }) => {
               className="w-full h-72 object-cover"
             />
             {/* Title and description container */}
-            <div className="flex-grow px-4 py-2 flex  justify-center">
+            <div className="flex-grow px-4 py-2 flex justify-center">
               <h3 className="text-xl font-semibold text-center text-slate-500">{movie.title}</h3>
             </div>
           </div>

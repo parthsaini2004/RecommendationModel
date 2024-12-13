@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getImageUrl } from './utils';
 
-const RecentlyViewedMovie = ({ movieId }) => {
+const RecentlyViewedMovie = ({ movieId,isFocused,setIsFocused }) => {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
@@ -14,7 +14,6 @@ const RecentlyViewedMovie = ({ movieId }) => {
 
       try {
         const response = await axios.get(url);
-        // console.log("Fetched Movie Details:", response.data); // Debug log
         setMovie(response.data);
       } catch (err) {
         console.error("Error fetching movie details:", err);
@@ -25,28 +24,42 @@ const RecentlyViewedMovie = ({ movieId }) => {
   }, [movieId]);
 
   if (!movieId) {
-    return <p>No movie selected to display.</p>;
+    return <p className="text-gray-400">No movie selected to display.</p>;
   }
 
   if (!movie) {
-    return <p>Loading...</p>;
+    return <p className="text-gray-400">Loading...</p>;
   }
 
   const imageUrl = movie.poster_path ? getImageUrl(movie.poster_path) : null;
 
+  const handleUpdateMovie =  (movieId) => {
+    setIsFocused(!isFocused);
+  }
+ 
   return (
-    <div className="flex items-center gap-4">
+   
+    <div  onClick={() => handleUpdateMovie(movieId)} className="flex items-center gap-4 py-4 px-3 bg-gray-800 rounded-lg shadow-lg w-full max-w-md mt-5 mb-5 ml-[100px] cursor-pointer">
+       
+          
       {imageUrl ? (
         <img
           src={imageUrl}
           alt={movie.title}
-          className="w-[100px] h-[120px] object-cover rounded mt-[-50px]"
+          className="w-[100px] h-[120px] object-cover rounded-md"
         />
       ) : (
-        <p className="text-gray-100">No Image Available</p>
+        <p className="text-gray-500">No Image Available</p>
       )}
-      <p className="text-3xl font-semibold text-gray-100 ">{movie.title}</p>
+      <div className="flex-1">
+      
+      <p className="text-2lg font-semibold text-white">Recently Viewed:</p>
+        <p className="text-lg font-semibold text-white">{movie.title}</p>
+        <p className="text-sm text-gray-400">{movie.release_date.slice(0,4)}</p>
+      </div>
+      
     </div>
+   
   );
 };
 

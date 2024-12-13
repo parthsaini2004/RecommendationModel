@@ -11,6 +11,8 @@ const Homepage = () => {
   const [loading, setLoading] = useState(true);
   const [movieIds, setMovieIds] = useState([]);
   const [recentlyWatchedMovie, setRecentlyWatchedMovie] = useState(null);
+  const [isFocused,setIsFocused]=useState(false);
+  const [isDescription,setIsDescription]=useState('');
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -77,23 +79,44 @@ const Homepage = () => {
       {user ? (
         <>
           <Navbar user={user} />
+          {isFocused &&(<TrailerViewer 
+          movieId={recentlyWatchedMovie} 
+          isFocused={isFocused}
+          setIsFocused={setIsFocused}
+          isDescription={isDescription}
+          setIsDescription={setIsDescription}
+          user={user}
+          />)}
+          {!isFocused && (
+          <>
           {user.viewDetails && user.viewDetails.recentlyWatched && (
-            <div className="px-3 ml-5 max-w-xl mx-auto my-1 cursor-pointer sh">
-              <div className="items-center gap-4 relative">
-                <p className="text-3xl font-semibold text-white text-left mt-[30px] px-[118px]">
-                  Recently Viewed:
-                </p>
-                <RecentlyViewedMovie movieId={user.viewDetails.recentlyWatched} />
-              </div>
-            </div>
+        //    <div className="px-4 mx-auto my-4 max-w-2xl cursor-pointer bg-gray-900 rounded-lg shadow-md hover:bg-gray-800 transition-all duration-300">
+        //    <div className="relative flex items-center gap-4 p-4">
+        //      <p className="text-2xl font-semibold text-white text-left mt-4 px-4">
+        //        Recently Viewed:
+        //      </p>
+             
+        //    </div>
+        //  </div>
+        <RecentlyViewedMovie movieId={user.viewDetails.recentlyWatched} isFocused={isFocused}
+        setIsFocused={setIsFocused} />
+         
           )}
-          <TrailerViewer movieId={recentlyWatchedMovie} />
+          
           <MovieDetailsFetcher
             movieIds={movieIds}
             recentlyWatchedMovie={recentlyWatchedMovie}
             user={user}
             setUser={setUser}
+            isFocused={isFocused}
+            setIsFocused={setIsFocused}
+            setIsDescription={setIsDescription}
+            isDescription={isDescription}
+            
           />
+          </>
+          )
+          }
         </>
       ) : (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
