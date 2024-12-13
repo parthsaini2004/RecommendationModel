@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused, setIsDescription, isDescription }) => {
+const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused }) => {
   const [movies, setMovies] = useState([]);
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
   const apiUrl = 'https://api.themoviedb.org/3/movie/';
@@ -35,7 +35,7 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused,
     } catch (error) {
       console.error('Error updating recently watched movie:', error);
     } finally {
-      setIsFocused(!isFocused);
+      setIsFocused(true);
       
     }
   };

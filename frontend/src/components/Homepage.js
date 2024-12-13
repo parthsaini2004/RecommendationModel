@@ -86,6 +86,8 @@ const Homepage = () => {
           isDescription={isDescription}
           setIsDescription={setIsDescription}
           user={user}
+          setUser={setUser}
+          movieIds={movieIds}
           />)}
           {!isFocused && (
           <>
@@ -110,8 +112,9 @@ const Homepage = () => {
             setUser={setUser}
             isFocused={isFocused}
             setIsFocused={setIsFocused}
-            setIsDescription={setIsDescription}
-            isDescription={isDescription}
+           
+            
+            
             
           />
           </>
