@@ -1,18 +1,48 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const TrailerViewer = ({ movieId }) => {
+const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsDescription }) => {
   const [trailerKey, setTrailerKey] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const shortenedDescription = isDescription ? isDescription.slice(0, 1000) : '';
+
+  const handleCloseFocus = () => {
+    setIsFocused(!isFocused);
+  };
+
+  const fetchDescription = async () => {
+    if (!movieId) return; // If there's no movieId, do nothing
+
+    try {
+      const apiKey = process.env.REACT_APP_TMDB_API_KEY; // Fetch the API key from the .env file
+
+      if (!apiKey) {
+        throw new Error("API key is missing.");
+      }
+
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=en-US`
+      );
+
+      const { overview } = response.data;
+
+      // Update the description only if it's not the same as the new one
+      setIsDescription((prevDescription) => {
+        if (prevDescription !== overview) {
+          return overview || 'No description available';
+        }
+        return prevDescription; // Do not overwrite if the description is the same
+      });
+    } catch (error) {
+      console.error("Error fetching description:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchTrailer = async () => {
       try {
         const apiKey = process.env.REACT_APP_TMDB_API_KEY; // Fetch the API key from the .env file
-
-        // Log the API key to confirm it's being accessed correctly (remove in production)
-        console.log("TMDB API Key:", apiKey);
 
         if (!apiKey) {
           throw new Error("API key is missing.");
@@ -22,15 +52,7 @@ const TrailerViewer = ({ movieId }) => {
           `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=en-US`
         );
 
-        // Log the API response to inspect its structure
-        console.log("API Response Data:", response.data);
-
         const results = response.data.results || [];
-
-        // Log each video result for debugging
-        results.forEach((video, index) => {
-          console.log(`Video ${index + 1}:`, video);
-        });
 
         const trailer = results.find(
           (video) => video.type === "Trailer" && video.site === "YouTube"
@@ -39,7 +61,6 @@ const TrailerViewer = ({ movieId }) => {
         if (trailer) {
           setTrailerKey(trailer.key);
         } else {
-          console.log("No trailer found for this movie.");
           setTrailerKey(null);
         }
       } catch (error) {
@@ -52,36 +73,61 @@ const TrailerViewer = ({ movieId }) => {
     };
 
     if (movieId) {
+      fetchDescription();
       fetchTrailer();
     } else {
-      console.log("Invalid movieId provided:", movieId);
       setLoading(false);
     }
   }, [movieId]);
 
   if (loading) {
-    return <p>Loading trailer...</p>;
+    return (
+      <p className="text-center text-lg font-semibold text-slate-500">
+        Loading trailer...
+      </p>
+    );
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <p className="text-center font-semibold text-slate-500">
+        {error}
+      </p>
+    );
   }
 
   if (!trailerKey) {
-    return <p>No trailer available for this movie.</p>;
+    return (
+      <p className="text-center text-lg font-semibold text-slate-500">
+        No trailer available for this movie.
+      </p>
+    );
   }
 
   return (
-    <div className="trailer-container">
+    <div className="trailer-container bg-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto mt-5">
       <iframe
-        width="560"
+        width="100%"
         height="315"
-        src={`https://www.youtube.com/embed/${trailerKey}`}
+        src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
         title="Movie Trailer"
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
+        className="rounded-md mb-4"
       ></iframe>
+      {/* Display description if available */}
+      {isDescription && (
+        <div className="text-slate-500 text-lg mb-4 text-justify">
+          {shortenedDescription}
+        </div>
+      )}
+      <button
+        onClick={handleCloseFocus}
+        className="mt-4 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-300"
+      >
+        Close
+      </button>
     </div>
   );
 };
