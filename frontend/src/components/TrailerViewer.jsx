@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import MovieDetailsFetcher from "./MovieDetailsFetcher";
 
-const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsDescription }) => {
+const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsDescription,user,setUser,movieIds,recentlyWatchedMovie }) => {
   const [trailerKey, setTrailerKey] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -105,10 +106,10 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
   }
 
   return (
-    <div className="trailer-container bg-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto mt-5">
+    <div className="trailer-container bg-gray-800 p-6 rounded-lg shadow-lg max-w-7xl mx-auto mt-5">
       <iframe
         width="100%"
-        height="315"
+        height="400"
         src={`https://www.youtube.com/embed/${trailerKey}?autoplay=1`}
         title="Movie Trailer"
         frameBorder="0"
@@ -124,10 +125,22 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
       )}
       <button
         onClick={handleCloseFocus}
-        className="mt-4 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-300"
+        className="mt-4 mb-2 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all duration-300"
       >
         Close
       </button>
+
+      <div className="text-slate-500 text-2xl mb-4 text-justify" >Viewers with similar interset also watch:</div>
+
+      <MovieDetailsFetcher
+            movieIds={movieIds}
+            recentlyWatchedMovie={recentlyWatchedMovie}
+            user={user}
+            setUser={setUser}
+            isFocused={isFocused}
+            setIsFocused={setIsFocused}
+           
+          />
     </div>
   );
 };
