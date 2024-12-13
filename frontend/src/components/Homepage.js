@@ -3,7 +3,8 @@ import axios from 'axios';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import RecentlyViewedMovie from './RecentlyViewedMovie';
-import MovieDetailsFetcher from './MovieDetailsFetcher'; // Import the new component
+import MovieDetailsFetcher from './MovieDetailsFetcher';
+import TrailerViewer from './TrailerViewer';
 
 const Homepage = () => {
   const [user, setUser] = useState(null);
@@ -32,26 +33,19 @@ const Homepage = () => {
         setUser(userData);
 
         if (userData?.viewDetails?.movieList) {
-          // Extract the movieIds from movieList
           let uniqueMovieIds = userData.viewDetails.movieList.map((movie) => movie.movieId);
 
-          // If there's a recently watched movie, move it to the end of the list
           if (recentlyWatchedMovie) {
-            // Remove the recently watched movie if it exists in the array
             const movieIndex = uniqueMovieIds.indexOf(recentlyWatchedMovie);
             if (movieIndex !== -1) {
-              uniqueMovieIds.splice(movieIndex, 1); // Remove the movie from the list
+              uniqueMovieIds.splice(movieIndex, 1);
             }
-
-            // Add the recently watched movie at the end of the list
             uniqueMovieIds.push(recentlyWatchedMovie);
           }
 
-          // Update movieIds state
           setMovieIds(uniqueMovieIds);
         }
 
-        // Set the recently watched movie
         if (userData.viewDetails) {
           setRecentlyWatchedMovie(userData.viewDetails.recentlyWatched);
         }
@@ -63,7 +57,7 @@ const Homepage = () => {
     };
 
     fetchUserDetails();
-  }, [recentlyWatchedMovie]); // Dependency on recentlyWatchedMovie
+  }, [recentlyWatchedMovie,user]);
 
   if (loading) {
     return (
@@ -93,8 +87,13 @@ const Homepage = () => {
               </div>
             </div>
           )}
-
-          <MovieDetailsFetcher movieIds={movieIds} recentlyWatchedMovie={recentlyWatchedMovie} user={user} setUser={setUser} />
+          <TrailerViewer movieId={recentlyWatchedMovie} />
+          <MovieDetailsFetcher
+            movieIds={movieIds}
+            recentlyWatchedMovie={recentlyWatchedMovie}
+            user={user}
+            setUser={setUser}
+          />
         </>
       ) : (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
