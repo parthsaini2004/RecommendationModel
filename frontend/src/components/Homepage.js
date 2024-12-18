@@ -5,14 +5,17 @@ import { Link } from 'react-router-dom';
 import RecentlyViewedMovie from './RecentlyViewedMovie';
 import MovieDetailsFetcher from './MovieDetailsFetcher';
 import TrailerViewer from './TrailerViewer';
+import SearchElement from './searchElement';
 
 const Homepage = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [movieIds, setMovieIds] = useState([]);
   const [recentlyWatchedMovie, setRecentlyWatchedMovie] = useState(null);
-  const [isFocused,setIsFocused]=useState(false);
-  const [isDescription,setIsDescription]=useState('');
+  const [isFocused, setIsFocused] = useState(false);
+  const [isDescription, setIsDescription] = useState('');
+  const [searching, setIsSearching] = useState(false);
+  const [searchValue, setSearchValue] = useState(null);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -59,7 +62,7 @@ const Homepage = () => {
     };
 
     fetchUserDetails();
-  }, [recentlyWatchedMovie,user]);
+  }, [recentlyWatchedMovie, user]);
 
   if (loading) {
     return (
@@ -78,48 +81,63 @@ const Homepage = () => {
     <div className="bg-[#000000] min-h-screen pt-1">
       {user ? (
         <>
-          <Navbar user={user} />
-          {isFocused &&(<TrailerViewer 
-          movieId={recentlyWatchedMovie} 
-          isFocused={isFocused}
-          setIsFocused={setIsFocused}
-          isDescription={isDescription}
-          setIsDescription={setIsDescription}
-          user={user}
-          setUser={setUser}
-          movieIds={movieIds}
-          />)}
-          {!isFocused && (
-          <>
-          {user.viewDetails && user.viewDetails.recentlyWatched && (
-        //    <div className="px-4 mx-auto my-4 max-w-2xl cursor-pointer bg-gray-900 rounded-lg shadow-md hover:bg-gray-800 transition-all duration-300">
-        //    <div className="relative flex items-center gap-4 p-4">
-        //      <p className="text-2xl font-semibold text-white text-left mt-4 px-4">
-        //        Recently Viewed:
-        //      </p>
-             
-        //    </div>
-        //  </div>
-        <RecentlyViewedMovie movieId={user.viewDetails.recentlyWatched} isFocused={isFocused}
-        setIsFocused={setIsFocused} />
-         
-          )}
-          
-          <MovieDetailsFetcher
-            movieIds={movieIds}
-            recentlyWatchedMovie={recentlyWatchedMovie}
-            user={user}
-            setUser={setUser}
+
+          <Navbar user={user}
+            setIsSearching={setIsSearching}
+            setSearchValue={setSearchValue}
+
+          />
+          {isFocused && (<TrailerViewer
+            movieId={recentlyWatchedMovie}
             isFocused={isFocused}
             setIsFocused={setIsFocused}
-           
-            
-            
-            
-          />
-          </>
-          )
+            isDescription={isDescription}
+            setIsDescription={setIsDescription}
+            user={user}
+            setUser={setUser}
+            movieIds={movieIds}
+          />)}
+
+          {searching ? (
+
+            <SearchElement
+              searchValue={searchValue}
+              user={user} // Pass the user state
+              setUser={setUser} // Pass the setUser function
+              setIsFocused={setIsFocused} // Pass the setIsFocused function
+            />
+
+
+          ) : (
+            <>
+
+              {!isFocused && (
+                <>
+                  {user.viewDetails && user.viewDetails.recentlyWatched && (
+
+                    <RecentlyViewedMovie movieId={user.viewDetails.recentlyWatched} isFocused={isFocused}
+                      setIsFocused={setIsFocused} />
+
+                  )}
+
+                  <MovieDetailsFetcher
+                    movieIds={movieIds}
+                    recentlyWatchedMovie={recentlyWatchedMovie}
+                    user={user}
+                    setUser={setUser}
+                    isFocused={isFocused}
+                    setIsFocused={setIsFocused}
+                  />
+
+
+                </>
+              )
+              }
+
+            </>)
           }
+
+
         </>
       ) : (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
