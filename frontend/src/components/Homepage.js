@@ -42,7 +42,7 @@ const Homepage = () => {
             if (movieIndex !== -1) {
               uniqueMovieIds.splice(movieIndex, 1);
             }
-            uniqueMovieIds.push(recentlyWatchedMovie);
+            // uniqueMovieIds.push(recentlyWatchedMovie);
           }
 
           setMovieIds(uniqueMovieIds);
