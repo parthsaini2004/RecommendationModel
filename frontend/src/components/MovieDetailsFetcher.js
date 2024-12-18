@@ -30,12 +30,16 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
         },
       }));
 
-     
+      setIsFocused(true);
+      window.scrollTo({
+        top: 5, // Adjust the number to the scroll position you want (in pixels)
+        behavior: 'smooth', // Smooth scrolling
+      });
 
     } catch (error) {
       console.error('Error updating recently watched movie:', error);
     } finally {
-      setIsFocused(true);
+      
       
     }
   };
@@ -67,10 +71,10 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
   }, [movieIds]);
 
   return (
-    <div className="flex flex-wrap justify-center gap-6">
+    <div className="flex flex-wrap justify-center gap-6 ">
       {movies.map((movie) => (
         <button
-          className="object-cover"
+          className="object-cover cursor-pointer"
           key={movie.id} // Ensure key is unique
           onClick={() => handleUpdateMovie(movie.id)} // Pass movieId when clicked
         >

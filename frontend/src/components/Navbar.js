@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = ({ user }) => {
+const Navbar = ({ user,setIsSearching,setSearchValue}) => {
+  const items = [
+    "Apple",
+    "Banana",
+    "Orange",
+    "Grapes",
+    "Pineapple",
+    "Mango",
+    "Strawberry",
+  ];
+  const [query, setQuery] = useState("");
+  // const [searching, setIsSearching] = useState(false);
 
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+    setSearchValue(value);
+    setIsSearching(value.length > 0);
+    // setIsSearching(value.length > 0); // Set searching to true if query is not empty
+  };
+
+  // Filter the items based on query
+  // const filteredItems = items.filter(item =>
+  //   item.toLowerCase().includes(query.toLowerCase())
+  // );
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("authToken"); // Clear the auth token
@@ -13,20 +36,50 @@ const Navbar = ({ user }) => {
       <div className="navbar  bg-[#831010] shadow-lg rounded-lg">
         {/* Left Section */}
         <div className="flex-1">
-          <a className="btn btn-ghost normal-case text-3xl font-bold text-[#ffffff]">Recommendation Model</a>
+          <a className="cursor-pointer btn btn-ghost normal-case text-3xl font-bold text-[#ffffff]">Recommendation Model</a>
         </div>
 
         {/* Right Section */}
-        <div className="flex-none gap-4">
+        <div className="flex-none gap-4 cursor-pointer">
           {/* Search Input */}
-          <div className="form-control w-[300px]">
+          {/* <div className="form-control w-[300px]">
             <input
-            
+
               type="text"
               placeholder="Search"
-              className="input input-bordered btn-ghost text-white bg-white w-32 md:w-auto cursor-pointer"
+              className="input input-bordered btn-ghost font-semibold text-slate-400 bg-white w-32 md:w-auto cursor-pointer"
             />
-          </div>
+
+          </div> */}
+
+<div className="form-control w-[300px] cursor-pointer">
+      <input
+        type="search"
+        placeholder="Search"
+        value={query}
+        onChange={handleInputChange}
+        className="cursor-pointer input input-bordered btn-ghost font-semibold text-slate-400 bg-white w-32 md:w-auto "
+      />
+      
+      {/* {searching && query.length > 0 && (
+        <div className="mt-2 w-[300px] bg-white shadow-lg border border-gray-300 rounded-md">
+          <ul className="max-h-40 overflow-y-auto">
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item, index) => (
+                <li
+                  key={index}
+                  className="px-4 py-2 cursor-pointer hover:bg-blue-100"
+                >
+                  {item}
+                </li>
+              ))
+            ) : (
+              <li className="px-4 py-2 text-gray-500">No results found</li>
+            )}
+          </ul>
+        </div>
+      )} */}
+    </div>
 
           {/* Profile Dropdown */}
           <div className="dropdown dropdown-end mr-2">
