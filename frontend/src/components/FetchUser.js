@@ -20,7 +20,7 @@ const FetchUser = () => {
     setUserData(null); // Clear previous user data
 
     try {
-      const response = await fetch('http://localhost:5000/api/fetch-users', {
+      const response = await fetch('https://recommendationmodelbackend.onrender.com/api/fetch-users', {
         method: 'GET', // Use GET to fetch all users
         headers: {
           'Content-Type': 'application/json',

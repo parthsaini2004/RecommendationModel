@@ -21,7 +21,7 @@ const AddUser = () => {
 
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/add-user', {
+      const response = await fetch('https://recommendationmodelbackend.onrender.com/api/add-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

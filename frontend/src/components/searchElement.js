@@ -13,7 +13,7 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/update-recently-watched', {
+      const response = await axios.post('https://recommendationmodelbackend.onrender.com/api/update-recently-watched', {
         email: user.email,
         recentlyWatchedMovie: movieId,
       });

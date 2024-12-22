@@ -28,7 +28,7 @@ const Homepage = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:5000/api/user-details', {
+        const response = await axios.get('https://recommendationmodelbackend.onrender.com/api/user-details', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

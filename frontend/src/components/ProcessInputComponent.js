@@ -17,7 +17,7 @@ const ProcessInputComponent = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/process-python', {
+      const response = await fetch('https://recommendationmodelbackend.onrender.com/api/process-python', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
