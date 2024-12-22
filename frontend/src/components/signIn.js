@@ -13,7 +13,7 @@ const SignIn = () => {
     setError('');
   
     try {
-      const response = await axios.post('http://localhost:5000/api/signin', { email, password });
+      const response = await axios.post('https://recommendationmodelbackend.onrender.com/api/signin', { email, password });
       const { token } = response.data;
   
       // Save token as 'authToken' to localStorage
