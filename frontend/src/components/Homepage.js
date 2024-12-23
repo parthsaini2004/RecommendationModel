@@ -228,10 +228,10 @@ const Homepage = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-900 via-black to-red-900">
+      <div className="flex items-center justify-center min-h-screen bg-black">
         <div className="flex items-center space-x-4">
-          <div className="w-8 h-8 border-4 border-t-4 border-red-500 border-solid rounded-full animate-spin"></div>
-          <span className="text-lg text-gray-200 font-semibold">
+          <div className="w-8 h-8 border-4 border-t-4 border-indigo-500 border-solid rounded-full animate-spin"></div>
+          <span className="text-lg text-gray-300 font-semibold">
             Loading, please wait...
           </span>
         </div>
@@ -240,7 +240,7 @@ const Homepage = () => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-indigo-900 via-black to-red-900 min-h-screen pt-1">
+    <div className="bg-black min-h-screen pt-1">
       {user ? (
         <>
           <Navbar
@@ -295,16 +295,16 @@ const Homepage = () => {
           )}
         </>
       ) : (
-        <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-indigo-900 via-black to-red-900">
+        <div className="flex justify-center items-center min-h-screen bg-black">
           <div className="text-center bg-gray-800 p-8 rounded-lg shadow-lg">
-            <p className="text-center text-xl text-red-500 font-semibold mb-4">
+            <p className="text-center text-xl text-indigo-500 font-semibold mb-4">
               Please sign in to access your recommendations.
             </p>
             <p className="text-gray-400 text-center">
               You will be able to personalize your movie recommendations once logged in.
             </p>
             <Link to="/">
-              <p className="text-center bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 mt-5 py-2 text-xl font-semibold">
+              <p className="text-center bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-4 mt-5 py-2 text-xl font-semibold">
                 Sign In
               </p>
             </Link>
