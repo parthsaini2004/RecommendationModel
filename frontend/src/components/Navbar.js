@@ -125,8 +125,7 @@
 //   );
 // };
 
-// export default Navbar;
-import React, { useState } from "react";
+// export default Navbar;import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ user, setIsSearching, setSearchValue }) => {
