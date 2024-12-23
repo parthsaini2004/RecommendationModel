@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@splinetool/react-spline": "^4.0.0",
+    "@splinetool/runtime": "^1.9.54",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "daisyui": "^4.12.20",
@@ -37,7 +39,9 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "patch-package": "^8.0.0",
     "postcss": "^8.4.49",
+    "postinstall-postinstall": "^2.1.0",
     "tailwindcss": "^3.4.16"
   }
 }

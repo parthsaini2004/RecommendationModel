@@ -1,8 +1,10 @@
 .App {
   text-align: center;
   font-family: Arial, sans-serif;
+  padding: 0!important;margin: 0!important;
 }
-
+html{padding: 0!important;margin: 0!important;}
+body{padding: 0!important;margin: 0!important;}
 h1 {
   color: #4CAF50;
 }

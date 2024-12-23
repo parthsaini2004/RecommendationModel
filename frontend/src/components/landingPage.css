@@ -1,0 +1,20 @@
+/* Prevent zooming on mobile */
+html, body {
+    touch-action: manipulation; /* Prevent pinch zoom */
+    -ms-touch-action: none; /* For IE */
+    user-select: none; /* Optional: Prevent text selection */
+  }
+  
+  /* Prevent zooming using mouse wheel */
+  body {
+    overflow: hidden; /* Optional: Prevents horizontal/vertical scroll */
+  }
+  
+  /* Disable zooming on iframes or divs */
+  iframe {
+    pointer-events: auto;  /* Allow interaction */
+    touch-action: none;    /* Disable pinch zooming */
+    user-select: none;     /* Optional: Disable text selection */
+  }
+  
+  

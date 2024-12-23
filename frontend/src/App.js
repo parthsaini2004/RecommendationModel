@@ -9,6 +9,7 @@ import ProcessInputComponent from './components/ProcessInputComponent';
 import SignIn from './components/signIn';
 import UserDetails from './components/userDetail';
 import Homepage from './components/Homepage';
+import LandingPage from './components/landingPage';
 
 function App() {
   return (
@@ -18,7 +19,9 @@ function App() {
        {/* <AddUser /> */}
 <Router>
       <Routes>
-        <Route path="/" element={<SignIn />} />
+      <Route path="/signup"  element={< AddUser/>}/>
+        <Route path="/"  element={<LandingPage />}/>
+        <Route path="/signin" element={<SignIn />} />
         <Route path="/homepage" element={<Homepage />} />
       </Routes>
     </Router>
