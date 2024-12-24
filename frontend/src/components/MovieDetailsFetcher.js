@@ -67,14 +67,14 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
   }, [movieIds]);
 
   return (
-    <div className="flex flex-wrap justify-center gap-8 p-6 bg-gray-50">
+    <div className="flex flex-wrap justify-center gap-8 p-6 bg-black">
       {movies.map((movie) => (
         <button
           className="cursor-pointer transform transition duration-300 hover:scale-105"
           key={movie.id} // Ensure key is unique
           onClick={() => handleUpdateMovie(movie.id)} // Pass movieId when clicked
         >
-          <div className="max-w-xs w-72 h-[420px] rounded-lg overflow-hidden shadow-lg bg-white flex flex-col">
+          <div className="max-w-xs w-72 h-[420px] rounded-lg overflow-hidden shadow-xl bg-[#1a1a1a] flex flex-col">
             {/* Image container */}
             <img
               src={movie.poster}
@@ -82,11 +82,11 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
               className="w-full h-72 object-cover"
             />
             {/* Title and description container */}
-            <div className="flex-grow px-4 py-2 flex flex-col items-center justify-center">
-              <h3 className="text-lg font-semibold text-center text-gray-800 truncate">
+            <div className="flex-grow px-4 py-3 flex flex-col items-center justify-center">
+              <h3 className="text-lg font-semibold text-center text-slate-200 truncate">
                 {movie.title}
               </h3>
-              <p className="text-sm text-gray-600 mt-2 text-center line-clamp-3">
+              <p className="text-sm text-slate-400 mt-2 text-center line-clamp-3">
                 {movie.description}
               </p>
             </div>
