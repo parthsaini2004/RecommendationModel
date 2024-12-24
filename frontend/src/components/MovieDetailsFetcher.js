@@ -79,6 +79,12 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
             console.log(`Fetching details for movie ID: ${movieId}`); // Log each ID
 
             try {
+              // Check if the movieId is valid by ensuring it's a positive number
+              if (!movieId || isNaN(movieId) || movieId <= 0) {
+                console.warn(`Invalid movie ID: ${movieId}`);
+                return null; // Skip invalid movie IDs
+              }
+
               const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
               const { title, poster_path, overview } = response.data;
               return {
@@ -106,7 +112,6 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
 
     fetchMovies();
   }, [movieIds]);
-
 
   return (
     <div className="flex flex-wrap justify-center gap-6 ">
