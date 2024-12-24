@@ -40,7 +40,7 @@ const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
   return (
     <div
       onClick={() => handleUpdateMovie(movieId)}
-      className="flex flex-col md:flex-row gap-5 p-6 bg-gradient-to-r from-indigo-900 to-black rounded-lg shadow-2xl hover:shadow-2xl transition-all duration-300 w-full max-w-md mt-5 mb-5 ml-20 cursor-pointer transform hover:scale-105"
+      className="flex flex-col md:flex-row gap-5 p-6 bg-black rounded-lg shadow-2xl w-full max-w-md mt-5 mb-5 ml-20 cursor-pointer transform hover:scale-105"
     >
       {/* Movie Poster */}
       {imageUrl ? (
@@ -63,16 +63,10 @@ const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
         <p className="text-lg font-semibold text-white mb-2">{movie.title}</p>
         <p className="text-sm text-gray-400 mb-3">{movie.release_date.slice(0, 4)}</p>
         
-        {/* Movie Description */}
+        {/* Movie Overview */}
         <p className="text-sm text-gray-300 italic mb-4 line-clamp-3">
           {movie.overview || 'No description available'}
         </p>
-
-        <div className="flex justify-end">
-          <button className="bg-indigo-600 text-white py-2 px-6 rounded-lg hover:bg-indigo-500 transition-colors">
-            View Details
-          </button>
-        </div>
       </div>
     </div>
   );
