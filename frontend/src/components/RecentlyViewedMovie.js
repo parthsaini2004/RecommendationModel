@@ -40,7 +40,7 @@ const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
   return (
     <div
       onClick={() => handleUpdateMovie(movieId)}
-      className="flex flex-col md:flex-row gap-5 p-6 bg-black rounded-lg shadow-2xl w-full max-w-md mt-5 mb-5 ml-20 cursor-pointer transform hover:scale-105"
+      className="flex flex-col md:flex-row gap-5 p-6 bg-indigo-900 rounded-lg shadow-2xl w-full max-w-md mt-5 mb-5 ml-20 cursor-pointer transform hover:scale-105"
     >
       {/* Movie Poster */}
       {imageUrl ? (
