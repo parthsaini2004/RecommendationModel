@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MovieDetailsFetcher from "./MovieDetailsFetcher";
+import { useNavigate } from 'react-router-dom';
 
 const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsDescription,user,setUser,movieIds,recentlyWatchedMovie }) => {
   const [trailerKey, setTrailerKey] = useState(null);
