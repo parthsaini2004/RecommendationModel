@@ -40,26 +40,39 @@ const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
   return (
     <div
       onClick={() => handleUpdateMovie(movieId)}
-      className="flex items-center gap-5 p-5 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 w-full max-w-lg mt-5 mb-5 ml-[100px] cursor-pointer"
+      className="flex flex-col md:flex-row gap-5 p-6 bg-gradient-to-r from-indigo-900 to-black rounded-lg shadow-2xl hover:shadow-2xl transition-all duration-300 w-full max-w-md mt-5 mb-5 ml-20 cursor-pointer transform hover:scale-105"
     >
       {/* Movie Poster */}
       {imageUrl ? (
         <img
           src={imageUrl}
           alt={movie.title}
-          className="w-[120px] h-[140px] object-cover rounded-lg border-2 border-gray-700 shadow-sm"
+          className="w-[140px] h-[180px] object-cover rounded-lg shadow-lg border-4 border-indigo-600"
         />
       ) : (
-        <p className="text-gray-500 italic">No Image Available</p>
+        <div className="w-[140px] h-[180px] bg-gray-500 rounded-lg flex items-center justify-center text-white font-semibold">
+          No Image Available
+        </div>
       )}
 
       {/* Movie Details */}
-      <div className="flex-1">
-        <p className="text-xl font-extrabold text-indigo-400 tracking-wide mb-1">
+      <div className="flex flex-col justify-between flex-1">
+        <p className="text-xl font-extrabold text-indigo-300 tracking-wide mb-2">
           Recently Viewed
         </p>
-        <p className="text-lg font-semibold text-white truncate">{movie.title}</p>
-        <p className="text-sm text-gray-400 mt-1 italic">{movie.release_date.slice(0, 4)}</p>
+        <p className="text-lg font-semibold text-white mb-2">{movie.title}</p>
+        <p className="text-sm text-gray-400 mb-3">{movie.release_date.slice(0, 4)}</p>
+        
+        {/* Movie Description */}
+        <p className="text-sm text-gray-300 italic mb-4 line-clamp-3">
+          {movie.overview || 'No description available'}
+        </p>
+
+        <div className="flex justify-end">
+          <button className="bg-indigo-600 text-white py-2 px-6 rounded-lg hover:bg-indigo-500 transition-colors">
+            View Details
+          </button>
+        </div>
       </div>
     </div>
   );
