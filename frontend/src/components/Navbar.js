@@ -154,7 +154,7 @@ const Navbar = ({ user, setIsSearching, setSearchValue }) => {
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
         `}
       </style>
-      <div className="navbar bg-gradient-to-r from-indigo-900 to-black shadow-lg rounded-lg font-[Poppins]">
+      <div className="navbar bg-indigo-600 shadow-lg rounded-lg font-[Poppins]">
         {/* Left Section */}
         <div className="flex-1">
           <a
