@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getImageUrl } from './utils';
 
-const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
+const RecentlyViewedMovie = ({ movieId,isFocused,setIsFocused }) => {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
         const response = await axios.get(url);
         setMovie(response.data);
       } catch (err) {
-        console.error('Error fetching movie details:', err);
+        console.error("Error fetching movie details:", err);
       }
     };
 
@@ -24,51 +24,42 @@ const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
   }, [movieId]);
 
   if (!movieId) {
-    return <p className="text-gray-400 italic font-light">No movie selected to display.</p>;
+    return <p className="text-gray-400">No movie selected to display.</p>;
   }
 
   if (!movie) {
-    return <p className="text-gray-400 italic font-light">Loading...</p>;
+    return <p className="text-gray-400">Loading...</p>;
   }
 
   const imageUrl = movie.poster_path ? getImageUrl(movie.poster_path) : null;
 
-  const handleUpdateMovie = (movieId) => {
+  const handleUpdateMovie =  (movieId) => {
     setIsFocused(!isFocused);
-  };
-
+  }
+ 
   return (
-    <div
-      onClick={() => handleUpdateMovie(movieId)}
-      className="flex flex-col md:flex-row gap-5 p-6 bg-indigo-900 rounded-lg shadow-2xl w-full max-w-md mt-5 mb-5 ml-20 cursor-pointer transform hover:scale-105"
-    >
-      {/* Movie Poster */}
+   
+    <div  onClick={() => handleUpdateMovie(movieId)} className="flex items-center gap-4 py-4 px-3 bg-gray-800 rounded-lg shadow-lg w-full max-w-md mt-5 mb-5 ml-[100px] cursor-pointer">
+       
+          
       {imageUrl ? (
         <img
           src={imageUrl}
           alt={movie.title}
-          className="w-[140px] h-[180px] object-cover rounded-lg shadow-lg border-4 border-indigo-600"
+          className="w-[100px] h-[120px] object-cover rounded-md"
         />
       ) : (
-        <div className="w-[140px] h-[180px] bg-gray-500 rounded-lg flex items-center justify-center text-white font-semibold">
-          No Image Available
-        </div>
+        <p className="text-gray-500">No Image Available</p>
       )}
-
-      {/* Movie Details */}
-      <div className="flex flex-col justify-between flex-1">
-        <p className="text-xl font-extrabold text-indigo-300 tracking-wide mb-2">
-          Recently Viewed
-        </p>
-        <p className="text-lg font-semibold text-white mb-2">{movie.title}</p>
-        <p className="text-sm text-gray-400 mb-3">{movie.release_date.slice(0, 4)}</p>
-        
-        {/* Movie Overview */}
-        <p className="text-sm text-gray-300 italic mb-4 line-clamp-3">
-          {movie.overview || 'No description available'}
-        </p>
+      <div className="flex-1">
+      
+      <p className="text-2lg font-semibold text-white">Recently Viewed:</p>
+        <p className="text-lg font-semibold text-white">{movie.title}</p>
+        <p className="text-sm text-gray-400">{movie.release_date.slice(0,4)}</p>
       </div>
+      
     </div>
+   
   );
 };
 
