@@ -41,35 +41,72 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
     } 
   };
 
+  // useEffect(() => {
+  //   const fetchMovies = async () => {
+  //     if (!movieIds || movieIds.length === 0) return;
+
+  //     try {
+  //       const movieDetails = await Promise.all(
+  //         movieIds.map(async (movieId) => {
+  //           const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
+  //           const { title, poster_path, overview } = response.data;
+  //           return {
+  //             id: movieId, // Add movieId to the object
+  //             title,
+  //             poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
+  //             description: overview,
+  //           };
+  //         })
+  //       );
+  //       setMovies(movieDetails);
+  //     } catch (error) {
+  //       console.error('Error fetching movie details:', error);
+  //     }
+  //   };
+
+  //   fetchMovies();
+  // }, [movieIds]);
+
   useEffect(() => {
     const fetchMovies = async () => {
       if (!movieIds || movieIds.length === 0) return;
 
+      console.log('Fetching movie details for IDs:', movieIds); // Log the movieIds
+
       try {
         const movieDetails = await Promise.all(
           movieIds.map(async (movieId) => {
-            const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
-            const { title, poster_path, overview } = response.data;
-            return {
-              id: movieId, // Add movieId to the object
-              title,
-              poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
-              description: overview,
-            };
+            console.log(`Fetching details for movie ID: ${movieId}`); // Log each ID
+
+            try {
+              const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
+              const { title, poster_path, overview } = response.data;
+              return {
+                id: movieId,
+                title,
+                poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
+                description: overview,
+              };
+            } catch (error) {
+              if (error.response && error.response.status === 404) {
+                console.error(`Movie with ID ${movieId} not found`);
+                return null; // Return null for 404 errors
+              }
+              throw error; // Rethrow other errors
+            }
           })
         );
-        setMovies(movieDetails);
+
+        // Filter out any null values (invalid movie IDs)
+        setMovies(movieDetails.filter(movie => movie !== null));
       } catch (error) {
-        if (error.response && error.response.status === 404) {
-          console.error(`Movie with ID ${movieId} not found`);
-          return null; // Return null for 404 errors
-        }
-        throw error; // Rethrow other errors
+        console.error('Error fetching movie details:', error);
       }
     };
 
     fetchMovies();
   }, [movieIds]);
+
 
   return (
     <div className="flex flex-wrap justify-center gap-6 ">
