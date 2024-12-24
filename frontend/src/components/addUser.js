@@ -108,6 +108,7 @@
 // export default AddUser;
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AddUser = () => {
   const [name, setName] = useState('');
@@ -116,6 +117,7 @@ const AddUser = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -156,6 +158,7 @@ const AddUser = () => {
       setSuccess(null);
     } finally {
       setLoading(false);
+      navigate("/signin");
     }
   };
 
