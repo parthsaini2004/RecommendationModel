@@ -11,10 +11,13 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
   
   const navigate = useNavigate();
 
+  // const handleGoBack = () => {
+  //   navigate("/homepage"); // Corrected path syntax
+  // };
   const handleGoBack = () => {
-    navigate("/homepage"); // Corrected path syntax
+    window.location.reload(); // Reloads the current page
   };
-
+  
   const handleCloseFocus = () => {
     setIsFocused(!isFocused);
   };
@@ -108,7 +111,13 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
     return (
       <p className="text-center text-lg font-semibold text-slate-500">
         No trailer available for this movie.
-        <button onClick={handleGoBack}>Go Back</button>
+        <button 
+  onClick={handleGoBack} 
+  className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-300 ease-in-out"
+>
+  Go Back
+</button>
+
       </p>
     );
   }
