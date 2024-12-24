@@ -60,7 +60,11 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
         );
         setMovies(movieDetails);
       } catch (error) {
-        console.error('Error fetching movie details:', error);
+        if (error.response && error.response.status === 404) {
+          console.error(`Movie with ID ${movieId} not found`);
+          return null; // Return null for 404 errors
+        }
+        throw error; // Rethrow other errors
       }
     };
 
