@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getImageUrl } from './utils';
 
-const RecentlyViewedMovie = ({ movieId,isFocused,setIsFocused }) => {
+const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const RecentlyViewedMovie = ({ movieId,isFocused,setIsFocused }) => {
         const response = await axios.get(url);
         setMovie(response.data);
       } catch (err) {
-        console.error("Error fetching movie details:", err);
+        console.error('Error fetching movie details:', err);
       }
     };
 
@@ -33,15 +33,16 @@ const RecentlyViewedMovie = ({ movieId,isFocused,setIsFocused }) => {
 
   const imageUrl = movie.poster_path ? getImageUrl(movie.poster_path) : null;
 
-  const handleUpdateMovie =  (movieId) => {
+  const handleUpdateMovie = (movieId) => {
     setIsFocused(!isFocused);
-  }
- 
+  };
+
   return (
-   
-    <div  onClick={() => handleUpdateMovie(movieId)} className="flex items-center gap-4 py-4 px-3 bg-gray-800 rounded-lg shadow-lg w-full max-w-md mt-5 mb-5 ml-[100px] cursor-pointer">
-       
-          
+    <div
+      onClick={() => handleUpdateMovie(movieId)}
+      className="flex items-center gap-4 p-4 bg-gray-900 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 w-full max-w-md mt-5 mb-5 ml-[100px] cursor-pointer"
+    >
+      {/* Movie Poster */}
       {imageUrl ? (
         <img
           src={imageUrl}
@@ -51,15 +52,14 @@ const RecentlyViewedMovie = ({ movieId,isFocused,setIsFocused }) => {
       ) : (
         <p className="text-gray-500">No Image Available</p>
       )}
+
+      {/* Movie Details */}
       <div className="flex-1">
-      
-      <p className="text-2lg font-semibold text-white">Recently Viewed:</p>
-        <p className="text-lg font-semibold text-white">{movie.title}</p>
-        <p className="text-sm text-gray-400">{movie.release_date.slice(0,4)}</p>
+        <p className="text-xl font-bold text-slate-100 mb-1">Recently Viewed:</p>
+        <p className="text-lg font-semibold text-white truncate">{movie.title}</p>
+        <p className="text-sm text-gray-400 mt-1">{movie.release_date.slice(0, 4)}</p>
       </div>
-      
     </div>
-   
   );
 };
 

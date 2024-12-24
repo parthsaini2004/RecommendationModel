@@ -35,8 +35,12 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
         top: 5, // Adjust the number to the scroll position you want (in pixels)
         behavior: 'smooth', // Smooth scrolling
       });
+
     } catch (error) {
       console.error('Error updating recently watched movie:', error);
+    } finally {
+      
+      
     }
   };
 
@@ -67,28 +71,23 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
   }, [movieIds]);
 
   return (
-    <div className="flex flex-wrap justify-center gap-8 p-6 bg-black">
+    <div className="flex flex-wrap justify-center gap-6 ">
       {movies.map((movie) => (
         <button
-          className="cursor-pointer transform transition duration-300 hover:scale-105"
+          className="object-cover cursor-pointer"
           key={movie.id} // Ensure key is unique
           onClick={() => handleUpdateMovie(movie.id)} // Pass movieId when clicked
         >
-          <div className="max-w-xs w-72 h-[420px] rounded-lg overflow-hidden shadow-xl bg-[#1a1a1a] flex flex-col">
+          <div className="max-w-xs w-72 h-[400px] rounded-lg overflow-hidden shadow-lg bg-transparent flex flex-col">
             {/* Image container */}
             <img
               src={movie.poster}
               alt={movie.title}
-              className="w-full h-72 object-cover"
+              className="w-full h-72 object-cover "
             />
             {/* Title and description container */}
-            <div className="flex-grow px-4 py-3 flex flex-col items-center justify-center">
-              <h3 className="text-lg font-semibold text-center text-slate-200 truncate">
-                {movie.title}
-              </h3>
-              <p className="text-sm text-slate-400 mt-2 text-center line-clamp-3">
-                {movie.description}
-              </p>
+            <div className="flex-grow px-4 py-2 flex justify-center">
+              <h3 className="text-xl font-semibold text-center text-slate-500">{movie.title}</h3>
             </div>
           </div>
         </button>
