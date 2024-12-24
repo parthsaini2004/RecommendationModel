@@ -38,10 +38,7 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
 
     } catch (error) {
       console.error('Error updating recently watched movie:', error);
-    } finally {
-      
-      
-    }
+    } 
   };
 
   useEffect(() => {
@@ -83,7 +80,7 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
             <img
               src={movie.poster}
               alt={movie.title}
-              className="w-full h-72 object-cover "
+              className="w-full h-72 object-cover"
             />
             {/* Title and description container */}
             <div className="flex-grow px-4 py-2 flex justify-center">

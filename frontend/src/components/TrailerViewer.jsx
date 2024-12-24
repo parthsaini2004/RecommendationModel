@@ -7,6 +7,12 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const shortenedDescription = isDescription ? isDescription.slice(0, 1000) : '';
+  
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate("/homepage"); // Corrected path syntax
+  };
 
   const handleCloseFocus = () => {
     setIsFocused(!isFocused);
@@ -101,6 +107,7 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
     return (
       <p className="text-center text-lg font-semibold text-slate-500">
         No trailer available for this movie.
+        <button onClick={handleGoBack}>Go Back</button>
       </p>
     );
   }

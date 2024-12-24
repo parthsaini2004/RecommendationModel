@@ -39,7 +39,7 @@ const RecentlyViewedMovie = ({ movieId,isFocused,setIsFocused }) => {
  
   return (
    
-    <div  onClick={() => handleUpdateMovie(movieId)} className="flex items-center gap-4 py-4 px-3 bg-gray-800 rounded-lg shadow-lg w-full max-w-md mt-5 mb-5 ml-[100px] cursor-pointer">
+    <div  onClick={() => handleUpdateMovie(movieId)} className="flex items-center gap-4 py-4 px-3 bg-gray-800 rounded-lg shadow-lg w-full max-w-md mt-5 mb-5 ml-[110px] cursor-pointer">
        
           
       {imageUrl ? (
