@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
 const FetchUser = () => {
+  
   // State to store the user email, response data, error, and loading status
   const [email, setEmail] = useState('');
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   // Function to handle the API call
   const fetchUserData = async () => {
@@ -20,7 +22,7 @@ const FetchUser = () => {
     setUserData(null); // Clear previous user data
 
     try {
-      const response = await fetch('https://recommendationmodelbackend.onrender.com/api/fetch-users', {
+      const response = await fetch(`${baseUrl}/api/fetch-users`, {
         method: 'GET', // Use GET to fetch all users
         headers: {
           'Content-Type': 'application/json',

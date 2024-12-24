@@ -5,6 +5,7 @@ const ProcessInputComponent = () => {
   const [output, setOutput] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +18,7 @@ const ProcessInputComponent = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('https://recommendationmodelbackend.onrender.com/api/process-python', {
+      const response = await fetch(`${baseUrl}/api/process-python`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

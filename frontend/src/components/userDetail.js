@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const UserDetails = () => {
   const [user, setUser] = useState(null);
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -12,7 +13,7 @@ const UserDetails = () => {
       }
 
       try {
-        const response = await axios.get('https://recommendationmodelbackend.onrender.com/api/user-details', {
+        const response = await axios.get(`${baseUrl}/api/user-details`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(response.data);

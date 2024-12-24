@@ -6,6 +6,7 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
   const apiKey = process.env.REACT_APP_TMDB_API_KEY; // Ensure your API key is set in environment variables
   const searchUrl = 'https://api.themoviedb.org/3/search/movie';
   const [errorCame,setErrorCame]=useState(false);
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
   const handleUpdateMovie = async (movieId) => {
     if (!user || !user.email) {
       alert('User not authenticated!');
@@ -13,7 +14,7 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
     }
 
     try {
-      const response = await axios.post('https://recommendationmodelbackend.onrender.com/api/update-recently-watched', {
+      const response = await axios.post(`${baseUrl}/api/update-recently-watched`, {
         email: user.email,
         recentlyWatchedMovie: movieId,
       });

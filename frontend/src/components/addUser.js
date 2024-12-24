@@ -111,6 +111,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AddUser = () => {
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -132,7 +133,7 @@ const AddUser = () => {
 
     try {
       setLoading(true);
-      const response = await fetch('https://recommendationmodelbackend.onrender.com/api/add-user', {
+      const response = await fetch(`${baseUrl}/api/add-user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

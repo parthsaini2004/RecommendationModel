@@ -5,6 +5,7 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
   const [movies, setMovies] = useState([]);
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
   const apiUrl = 'https://api.themoviedb.org/3/movie/';
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const handleUpdateMovie = async (movieId) => {
     if (!user || !user.email) {
@@ -13,7 +14,7 @@ const MovieDetailsFetcher = ({ movieIds, user, setUser, setIsFocused, isFocused 
     }
 
     try {
-      const response = await axios.post('https://recommendationmodelbackend.onrender.com/api/update-recently-watched', {
+      const response = await axios.post(`${baseUrl}/api/update-recently-watched`, {
         email: user.email,
         recentlyWatchedMovie: movieId,
       });
