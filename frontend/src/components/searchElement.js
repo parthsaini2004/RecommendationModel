@@ -6,24 +6,66 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
   const apiKey = process.env.REACT_APP_TMDB_API_KEY; // Ensure your API key is set in environment variables
   const searchUrl = 'https://api.themoviedb.org/3/search/movie';
   const [errorCame,setErrorCame]=useState(false);
-  const baseUrl = process.env.REACT_APP_API_BASE_URL;
+  const [isLoading, setIsLoading] = useState(false); 
+  const [progress, setProgress] = useState(0);
+  // const handleUpdateMovie = async (movieId) => {
+  //   if (!user || !user.email) {
+  //     alert('User not authenticated!');
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post('https://recommendationmodelbackend.onrender.com/api/update-recently-watched', {
+  //       email: user.email,
+  //       recentlyWatchedMovie: movieId,
+  //     });
+  //     if(response.status===300){
+  //       throw new Error('An intentional error');
+        
+  //     }
+  //     console.log(response.data.message); // Display success message
+
+  //     // Optionally refresh user data after the update
+  //     setUser((prevUser) => ({
+  //       ...prevUser,
+  //       viewDetails: {
+  //         ...prevUser.viewDetails,
+  //         recentlyWatched: movieId,
+  //         recentlyViewedAt: new Date(),
+  //       },
+  //     }));
+  //     setIsFocused(true);
+
+  //   } catch (error) {
+  //       console.error('Error updating recently watched movie:', error);
+  //       setErrorCame(true);
+  //       setTimeout(() => {
+  //         setErrorCame(false);
+  //       }, 2500);
+         
+  //     setIsFocused(false);
+  //   } 
+  // };
   const handleUpdateMovie = async (movieId) => {
     if (!user || !user.email) {
       alert('User not authenticated!');
       return;
     }
-
+  
+    setIsLoading(true); // Start loading
+  
     try {
-      const response = await axios.post(`${baseUrl}/api/update-recently-watched`, {
+      const response = await axios.post('https://recommendationmodelbackend.onrender.com/api/update-recently-watched', {
         email: user.email,
         recentlyWatchedMovie: movieId,
       });
-      if(response.status===300){
+  
+      if (response.status === 300) {
         throw new Error('An intentional error');
-        
       }
+  
       console.log(response.data.message); // Display success message
-
+  
       // Optionally refresh user data after the update
       setUser((prevUser) => ({
         ...prevUser,
@@ -33,18 +75,26 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
           recentlyViewedAt: new Date(),
         },
       }));
+  
       setIsFocused(true);
-
+      window.scrollTo({
+        top: 5, // Adjust the number to the scroll position you want (in pixels)
+        behavior: 'smooth', // Smooth scrolling
+      });
     } catch (error) {
-        console.error('Error updating recently watched movie:', error);
-        setErrorCame(true);
-        setTimeout(() => {
-          setErrorCame(false);
-        }, 2500);
-         
+      console.error('Error updating recently watched movie:', error);
+      setErrorCame(true);
+      setTimeout(() => {
+        setErrorCame(false);
+      }, 2500);
       setIsFocused(false);
-    } 
+      
+    } finally {
+      setIsLoading(false); // End loading
+      
+    }
   };
+  
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -73,6 +123,7 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
           .sort((a, b) => b.popularity - a.popularity); // Sort by popularity (descending)
 
         setSearchResults(results);
+        
       } catch (error) {
         console.error('Error fetching search results:', error);
       }
@@ -81,6 +132,40 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
     fetchMovies();
   }, [searchValue, apiKey]);
 
+
+  useEffect(() => {
+    // Simulate loading progress
+    if (progress < 100) {
+      const timer = setInterval(() => {
+        setProgress((prev) => prev + 1);
+      }, 50);
+      return () => clearInterval(timer); // Clean up on component unmount
+    }
+  }, [progress]);
+
+  if(isLoading){
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      {/* Container for loading bar and text */}
+      <div className="flex flex-col items-center justify-center space-y-4">
+        {/* Loading Bar */}
+        <div className="w-2/3 h-2 bg-gray-300 rounded-full overflow-hidden relative">
+          <div
+            className="absolute top-0 left-0 h-full bg-gradient-to-r from-indigo-400 to-indigo-600"
+            style={{ width: `${progress}%`, transition: 'width 0.1s ease' }}
+          ></div>
+        </div>
+
+        {/* Show More Loading Text */}
+        <div className="text-white text-xl font-semibold animate-pulse">
+          Loading  Movie
+        </div>
+      </div>
+    </div>
+    );
+     
+    
+  }
   return (
     <>
     {errorCame && (

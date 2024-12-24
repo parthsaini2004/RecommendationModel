@@ -200,23 +200,24 @@ const Homepage = () => {
 
         const userData = response.data.user;
         setUser(userData);
+        console.log(userData);
 
-        if (userData?.viewDetails?.movieList) {
-          let uniqueMovieIds = userData.viewDetails.movieList.map((movie) => movie.movieId);
+        // if (userData?.viewDetails?.movieList) {
+        //   let uniqueMovieIds = userData.viewDetails.movieList.map((movie) => movie.movieId);
 
-          if (recentlyWatchedMovie) {
-            const movieIndex = uniqueMovieIds.indexOf(recentlyWatchedMovie);
-            if (movieIndex !== -1) {
-              uniqueMovieIds.splice(movieIndex, 1);
-            }
-          }
+        //   // if (recentlyWatchedMovie) {
+        //   //   const movieIndex = uniqueMovieIds.indexOf(recentlyWatchedMovie);
+        //   //   if (movieIndex !== -1) {
+        //   //     uniqueMovieIds.splice(movieIndex, 1);
+        //   //   }
+        //   // }
 
-          setMovieIds(uniqueMovieIds);
-        }
+        //   setMovieIds(uniqueMovieIds);
+        // }
 
-        if (userData.viewDetails) {
-          setRecentlyWatchedMovie(userData.viewDetails.recentlyWatched);
-        }
+        // if (userData.viewDetails) {
+        //   setRecentlyWatchedMovie(userData.viewDetails.recentlyWatched);
+        // }
       } catch (error) {
         console.error('Error fetching user details:', error);
       } finally {
@@ -225,7 +226,8 @@ const Homepage = () => {
     };
 
     fetchUserDetails();
-  }, [recentlyWatchedMovie, user]);
+  }, []);
+
 
   if (loading) {
     return (
@@ -252,7 +254,7 @@ const Homepage = () => {
 
           {isFocused && (
             <TrailerViewer
-              movieId={recentlyWatchedMovie}
+              movieId={user.viewDetails.recentlyWatched}
               isFocused={isFocused}
               setIsFocused={setIsFocused}
               isDescription={isDescription}
@@ -269,6 +271,7 @@ const Homepage = () => {
               user={user}
               setUser={setUser}
               setIsFocused={setIsFocused}
+              setMovieIds={setMovieIds}
             />
           ) : (
             <>
@@ -284,7 +287,7 @@ const Homepage = () => {
 
                   <MovieDetailsFetcher
                     movieIds={movieIds}
-                    recentlyWatchedMovie={recentlyWatchedMovie}
+                    recentlyWatchedMovie={user.viewDetails.recentlyWatchedMovie}
                     user={user}
                     setUser={setUser}
                     isFocused={isFocused}

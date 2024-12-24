@@ -7,6 +7,7 @@ const RecentlyViewedMovie = ({ movieId,isFocused,setIsFocused }) => {
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
+      
       if (!movieId) return; // Exit if movieId is not provided
 
       const apiKey = process.env.REACT_APP_TMDB_API_KEY; // Ensure this is set
