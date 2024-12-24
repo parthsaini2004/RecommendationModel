@@ -24,11 +24,11 @@ const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
   }, [movieId]);
 
   if (!movieId) {
-    return <p className="text-gray-400">No movie selected to display.</p>;
+    return <p className="text-gray-400 italic font-light">No movie selected to display.</p>;
   }
 
   if (!movie) {
-    return <p className="text-gray-400">Loading...</p>;
+    return <p className="text-gray-400 italic font-light">Loading...</p>;
   }
 
   const imageUrl = movie.poster_path ? getImageUrl(movie.poster_path) : null;
@@ -40,24 +40,26 @@ const RecentlyViewedMovie = ({ movieId, isFocused, setIsFocused }) => {
   return (
     <div
       onClick={() => handleUpdateMovie(movieId)}
-      className="flex items-center gap-4 p-4 bg-gray-900 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 w-full max-w-md mt-5 mb-5 ml-[100px] cursor-pointer"
+      className="flex items-center gap-5 p-5 bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 w-full max-w-lg mt-5 mb-5 ml-[100px] cursor-pointer"
     >
       {/* Movie Poster */}
       {imageUrl ? (
         <img
           src={imageUrl}
           alt={movie.title}
-          className="w-[100px] h-[120px] object-cover rounded-md"
+          className="w-[120px] h-[140px] object-cover rounded-lg border-2 border-gray-700 shadow-sm"
         />
       ) : (
-        <p className="text-gray-500">No Image Available</p>
+        <p className="text-gray-500 italic">No Image Available</p>
       )}
 
       {/* Movie Details */}
       <div className="flex-1">
-        <p className="text-xl font-bold text-slate-100 mb-1">Recently Viewed:</p>
+        <p className="text-xl font-extrabold text-indigo-400 tracking-wide mb-1">
+          Recently Viewed
+        </p>
         <p className="text-lg font-semibold text-white truncate">{movie.title}</p>
-        <p className="text-sm text-gray-400 mt-1">{movie.release_date.slice(0, 4)}</p>
+        <p className="text-sm text-gray-400 mt-1 italic">{movie.release_date.slice(0, 4)}</p>
       </div>
     </div>
   );
