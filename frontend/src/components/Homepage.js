@@ -182,6 +182,21 @@ const Homepage = () => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
+    const setMovieIdsOnUserChange = async () => {
+      if (user?.viewDetails?.movieList) {
+        setMovieIds(user.viewDetails.movieList.map((movie) => movie.movieId));
+      } else {
+        // Handle the case where movieList is not available
+        console.warn("No movieList found in user viewDetails");
+        
+      }
+    };
+  
+    setMovieIdsOnUserChange();
+  }, [user]);
+  
+
+  useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         const token = localStorage.getItem('authToken');
