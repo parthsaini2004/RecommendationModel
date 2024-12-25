@@ -87,7 +87,7 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
       setTimeout(() => {
         setErrorCame(false);
       }, 2500);
-      setIsFocused(false);
+      // setIsFocused(false);
       
     } finally {
       setIsLoading(false); // End loading
@@ -184,7 +184,7 @@ const SearchElement = ({ searchValue, user, setUser, setIsFocused }) => {
         searchResults.map((movie) => (
 
             <button
-              
+            key={movie.id}
             onClick={() => handleUpdateMovie(movie.id)} // Pass movieId when clicked
           >
            

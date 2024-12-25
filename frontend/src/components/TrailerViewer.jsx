@@ -123,7 +123,7 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
   }
 
   return (
-    <div className="trailer-container bg-gray-800 p-6 rounded-lg shadow-lg max-w-7xl mx-auto mt-5">
+    <div className="trailer-container bg-gray-800 p-6 rounded-lg shadow-lg max-w-7xl mx-auto mt-5 mb-5">
       <iframe
         width="100%"
         height="400"
@@ -148,7 +148,7 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
       </button>
 
       <div className="text-slate-500 text-2xl mb-4 text-justify" >Viewers with similar interset also watch:</div>
-
+        
       <MovieDetailsFetcher
             movieIds={movieIds}
             recentlyWatchedMovie={recentlyWatchedMovie}
@@ -158,6 +158,7 @@ const TrailerViewer = ({ movieId, isFocused, setIsFocused, isDescription, setIsD
             setIsFocused={setIsFocused}
            
           />
+          
     </div>
   );
 };

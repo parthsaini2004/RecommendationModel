@@ -9,6 +9,7 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
   const [loading, setLoading] = useState(false); 
   const [progress, setProgress] = useState(0);
+  const [errorCame,setErrorCame]=useState(false);
 
   // const handleUpdateMovie = async (movieId) => {
   //   console.log("start");
@@ -59,6 +60,8 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
     }
   }, [progress]);
 
+
+
   const handleUpdateMovie = async (movieId) => {
     console.log("start");
     console.log(movieIds);
@@ -71,11 +74,14 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
     setLoading(true); // Start loading
 
     try {
+      
       const response = await axios.post(`${baseUrl}/api/update-recently-watched`, {
         email: user.email,
         recentlyWatchedMovie: movieId,
       });
-
+      if (response.status === 300) {
+        throw new Error('An intentional error');
+      }
       console.log(response.data.message); // Display success message
 
       // Optionally refresh user data after the update
@@ -94,6 +100,10 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
         behavior: 'smooth', // Smooth scrolling
       });
     } catch (error) {
+      setErrorCame(true);
+      setTimeout(() => {
+        setErrorCame(false);
+      }, 2500);
       console.error('Error updating recently watched movie:', error);
     } finally {
       setLoading(false); // Stop loading
@@ -105,9 +115,9 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
   useEffect(() => {
     const fetchMovies = async () => {
       if (!movieIds || movieIds.length === 0) return;
-      console.log(movieIds);
+      // console.log(movieIds);
       try {
-        console.log(movieIds);
+        // console.log(movieIds);
         
         const movieDetails = await Promise.all(
           movieIds.map(async (movieId) => {
@@ -128,7 +138,7 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
     };
 
     fetchMovies();
-  }, [movieIds]);
+  }, [user]);
 
   // useEffect(() => {
   //   const fetchMovies = async () => {
@@ -197,7 +207,15 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-6">
+    <>
+       {errorCame && (
+        <div className="fixed top-[90px] left-0 right-0 text-center text-red-500 font-semibold text-lg p-4 bg-red-100 border border-red-500 rounded-lg shadow-lg">
+          <strong>Sorry!</strong> We can't show the movie right now because it's not in the database.
+        </div>
+      )}
+       
+       <div className="flex flex-wrap justify-center gap-6">
+        
   {movies
     .filter((movie) => movie !== null) // Filter out null movies
     .map((movie) => (
@@ -221,6 +239,9 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
       </button>
     ))}
 </div>
+  
+    </>
+   
 
   );
 };
