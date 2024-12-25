@@ -102,75 +102,75 @@ const MovieDetailsFetcher = ({  user, setUser, setIsFocused, isFocused }) => {
     console.log("end");
     console.log(movieIds);
   };
-  // useEffect(() => {
-  //   const fetchMovies = async () => {
-  //     if (!movieIds || movieIds.length === 0) return;
-  //     console.log(movieIds);
-  //     try {
-  //       console.log(movieIds);
-        
-  //       const movieDetails = await Promise.all(
-  //         movieIds.map(async (movieId) => {
-  //           const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
-  //           const { title, poster_path, overview } = response.data;
-  //           return {
-  //             id: movieId, // Add movieId to the object
-  //             title,
-  //             poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
-  //             description: overview,
-  //           };
-  //         })
-  //       );
-  //       setMovies(movieDetails);
-  //     } catch (error) {
-  //       console.error('Error fetching movie details:', error);
-  //     }
-  //   };
-
-  //   fetchMovies();
-  // }, [movieIds]);
-
   useEffect(() => {
     const fetchMovies = async () => {
-      if (!movieIds || movieIds.length === 0) return; // Skip if no movieIds
-      console.log('Fetching movies for IDs:', movieIds);
-  
+      if (!movieIds || movieIds.length === 0) return;
+      console.log(movieIds);
       try {
+        console.log(movieIds);
+        
         const movieDetails = await Promise.all(
           movieIds.map(async (movieId) => {
-            try {
-              const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
-              const { title, poster_path, overview } = response.data;
-              return {
-                id: movieId,
-                title,
-                poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
-                description: overview,
-              };
-            } catch (innerError) {
-              // Log specific error (e.g., 404 or network error)
-              if (innerError.response?.status === 404) {
-                console.warn(`Movie with ID ${movieId} not found.`);
-              } else {
-                console.error(`Error fetching movie ID ${movieId}:`, innerError);
-              }
-              return null; // Return `null` to handle gracefully
-            }
+            const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
+            const { title, poster_path, overview } = response.data;
+            return {
+              id: movieId, // Add movieId to the object
+              title,
+              poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
+              description: overview,
+            };
           })
         );
-  
-        // Filter out nulls (invalid or not found movies)
-        const validMovies = movieDetails.filter((movie) => movie !== null);
-  
-        // Update state only with valid movies
-        setMovies(validMovies);
+        setMovies(movieDetails);
       } catch (error) {
         console.error('Error fetching movie details:', error);
       }
     };
-  
+
     fetchMovies();
   }, [movieIds]);
+
+  // useEffect(() => {
+  //   const fetchMovies = async () => {
+  //     if (!movieIds || movieIds.length === 0) return; // Skip if no movieIds
+  //     console.log('Fetching movies for IDs:', movieIds);
+  
+  //     try {
+  //       const movieDetails = await Promise.all(
+  //         movieIds.map(async (movieId) => {
+  //           try {
+  //             const response = await axios.get(`${apiUrl}${movieId}?api_key=${apiKey}`);
+  //             const { title, poster_path, overview } = response.data;
+  //             return {
+  //               id: movieId,
+  //               title,
+  //               poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
+  //               description: overview,
+  //             };
+  //           } catch (innerError) {
+  //             // Log specific error (e.g., 404 or network error)
+  //             if (innerError.response?.status === 404) {
+  //               console.warn(`Movie with ID ${movieId} not found.`);
+  //             } else {
+  //               console.error(`Error fetching movie ID ${movieId}:`, innerError);
+  //             }
+  //             return null; // Return `null` to handle gracefully
+  //           }
+  //         })
+  //       );
+  
+  //       // Filter out nulls (invalid or not found movies)
+  //       const validMovies = movieDetails.filter((movie) => movie !== null);
+  
+  //       // Update state only with valid movies
+  //       setMovies(validMovies);
+  //     } catch (error) {
+  //       console.error('Error fetching movie details:', error);
+  //     }
+  //   };
+  
+  //   fetchMovies();
+  // }, [movieIds]);
   
   if(loading){
     return (
