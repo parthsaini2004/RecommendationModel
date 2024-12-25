@@ -161,6 +161,9 @@
 // };
 
 // export default Homepage;
+
+
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
@@ -182,18 +185,13 @@ const Homepage = () => {
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
-    const setMovieIdsOnUserChange = async () => {
-      if (user?.viewDetails?.movieList) {
-        setMovieIds(user.viewDetails.movieList.map((movie) => movie.movieId));
-      } else {
-        // Handle the case where movieList is not available
-        console.warn("No movieList found in user viewDetails");
-        
-      }
-    };
+    if (user?.viewDetails?.movieList) {
+      setMovieIds(user.viewDetails.movieList.map((movie) => movie.movieId));
+    } else {
+      console.warn("No movieList found in user viewDetails");
+    }
+  }, [user]); // Ensure user is a dependency to trigger the effect when it changes.
   
-    setMovieIdsOnUserChange();
-  }, [user]);
   
 
   useEffect(() => {
@@ -215,24 +213,9 @@ const Homepage = () => {
 
         const userData = response.data.user;
         setUser(userData);
-        console.log(userData);
+        // console.log(userData);
 
-        // if (userData?.viewDetails?.movieList) {
-        //   let uniqueMovieIds = userData.viewDetails.movieList.map((movie) => movie.movieId);
-
-        //   // if (recentlyWatchedMovie) {
-        //   //   const movieIndex = uniqueMovieIds.indexOf(recentlyWatchedMovie);
-        //   //   if (movieIndex !== -1) {
-        //   //     uniqueMovieIds.splice(movieIndex, 1);
-        //   //   }
-        //   // }
-
-        //   setMovieIds(uniqueMovieIds);
-        // }
-
-        // if (userData.viewDetails) {
-        //   setRecentlyWatchedMovie(userData.viewDetails.recentlyWatched);
-        // }
+      
       } catch (error) {
         console.error('Error fetching user details:', error);
       } finally {
@@ -241,7 +224,7 @@ const Homepage = () => {
     };
 
     fetchUserDetails();
-  }, []);
+  }, [user]);
 
 
   if (loading) {
@@ -293,15 +276,18 @@ const Homepage = () => {
               {!isFocused && (
                 <>
                   {user.viewDetails && user.viewDetails.recentlyWatched && (
+                    <>
                     <RecentlyViewedMovie
                       movieId={user.viewDetails.recentlyWatched}
                       isFocused={isFocused}
                       setIsFocused={setIsFocused}
                     />
+                    <div className="text-slate-500 pl-[105px] text-3xl mb-5 pt-5 font-bold text-justify " >Viewers with similar Interest also watch:</div>
+                    </>
                   )}
-
+                  
                   <MovieDetailsFetcher
-                    movieIds={movieIds}
+                    movieIds={user.viewDetails.movieList}
                     recentlyWatchedMovie={user.viewDetails.recentlyWatchedMovie}
                     user={user}
                     setUser={setUser}
